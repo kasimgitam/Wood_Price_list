@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wood Types and Prices in India (INR)</title>
+    <style>
+        :root {
+            --primary: #5E3023;
+            --secondary: #895737;
+            --light: #D8B4A0;
+            --accent: #A5A58D;
+            --text: #333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f5f0;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--light);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background-color: white;
+            border: 2px solid var(--light);
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .price-table th, .price-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .price-table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .price-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .price {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        .category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .hardwood {
+            background-color: #8B5A2B;
+            color: white;
+        }
+        
+        .softwood {
+            background-color: #A5A58D;
+            color: white;
+        }
+        
+        .engineered {
+            background-color: #6B8E23;
+            color: white;
+        }
+        
+        .plywood {
+            background-color: #A0522D;
+            color: white;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--primary);
+            color: white;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .price-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Wood Types and Prices in India (INR)</h1>
+            <p>Comprehensive pricing information per square foot for various wood types in Indian Rupees</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="search" placeholder="Search wood types...">
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="hardwood">Hardwood</button>
+                <button class="filter-btn" data-filter="softwood">Softwood</button>
+                <button class="filter-btn" data-filter="engineered">Engineered</button>
+                <button class="filter-btn" data-filter="plywood">Plywood</button>
+            </div>
+        </div>
+        
+        <table class="price-table" id="priceTable">
+            <thead>
+                <tr>
+                    <th>Wood Type</th>
+                    <th>Category</th>
+                    <th>Price per sq.ft (INR)</th>
+                    <th>Common Uses</th>
+                    <th>Characteristics</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Wood Pricing Guide | Data compiled from Indian market sources</p>
+    </footer>
+    
+    <script>
+        // Wood data with prices per square foot in INR
+        const woods = [
+            // Hardwoods :cite[3]:cite[8]
+            {
+                name: "Teak",
+                category: "hardwood",
+                price: "₹900 - ₹1,800",
+                uses: "Furniture, flooring, outdoor structures",
+                characteristics: "Highly durable, water-resistant, golden brown color"
+            },
+            {
+                name: "Oak (Indian)",
+                category: "hardwood",
+                price: "₹400 - ₹1,200",
+                uses: "Furniture, flooring, cabinetry",
+                characteristics: "Strong grain pattern, durable, takes stains well"
+            },
+            {
+                name: "Sheesham",
+                category: "hardwood",
+                price: "₹500 - ₹1,500",
+                uses: "Furniture, carving, decorative items",
+                characteristics: "Rich brown color, durable, termite-resistant"
+            },
+            {
+                name: "Mahogany",
+                category: "hardwood",
+                price: "₹600 - ₹1,600",
+                uses: "Premium furniture, musical instruments",
+                characteristics: "Reddish-brown, straight grain, works easily"
+            },
+            {
+                name: "Rosewood",
+                category: "hardwood",
+                price: "₹1,000 - ₹2,500",
+                uses: "Luxury furniture, musical instruments",
+                characteristics: "Dark color with black streaks, very dense"
+            },
+            
+            // Softwoods :cite[3]
+            {
+                name: "Pine",
+                category: "softwood",
+                price: "₹150 - ₹400",
+                uses: "Construction, basic furniture, paneling",
+                characteristics: "Lightweight, visible knots, affordable"
+            },
+            {
+                name: "Deodar",
+                category: "softwood",
+                price: "₹200 - ₹500",
+                uses: "Construction, outdoor furniture",
+                characteristics: "Aromatic, naturally insect-resistant"
+            },
+            {
+                name: "Fir",
+                category: "softwood",
+                price: "₹180 - ₹450",
+                uses: "Structural framing, plywood cores",
+                characteristics: "Straight grain, good strength-to-weight ratio"
+            },
+            
+            // Engineered Woods :cite[3]:cite[5]:cite[6]
+            {
+                name: "Plywood (MR Grade)",
+                category: "plywood",
+                price: "₹65 - ₹90",
+                uses: "Furniture, interior work",
+                characteristics: "Moisture-resistant, affordable"
+            },
+            {
+                name: "Plywood (BWR Grade)",
+                category: "plywood",
+                price: "₹90 - ₹125",
+                uses: "Kitchens, bathrooms",
+                characteristics: "Boiling water resistant, durable"
+            },
+            {
+                name: "Plywood (BWP Grade)",
+                category: "plywood",
+                price: "₹130 - ₹180",
+                uses: "Bathrooms, outdoor use",
+                characteristics: "Boiling waterproof, highest grade"
+            },
+            {
+                name: "Marine Plywood",
+                category: "plywood",
+                price: "₹150 - ₹200",
+                uses: "Boat building, outdoor furniture",
+                characteristics: "Highest water resistance, premium quality"
+            },
+            {
+                name: "MDF",
+                category: "engineered",
+                price: "₹45 - ₹190",
+                uses: "Furniture, cabinets, wall panels",
+                characteristics: "Smooth surface, uniform density"
+            },
+            {
+                name: "Particle Board",
+                category: "engineered",
+                price: "₹20 - ₹50",
+                uses: "Budget furniture, temporary structures",
+                characteristics: "Made from wood waste, eco-friendly"
+            },
+            {
+                name: "HDF",
+                category: "engineered",
+                price: "₹60 - ₹220",
+                uses: "Flooring, high-end furniture",
+                characteristics: "Denser than MDF, moisture-resistant"
+            },
+            {
+                name: "Blockboard",
+                category: "engineered",
+                price: "₹80 - ₹210",
+                uses: "Doors, tables, long panels",
+                characteristics: "Lightweight, sturdy core"
+            },
+            
+            // Additional Indian wood types
+            {
+                name: "Sal",
+                category: "hardwood",
+                price: "₹300 - ₹800",
+                uses: "Furniture, construction, railway sleepers",
+                characteristics: "Extremely durable, termite-proof"
+            },
+            {
+                name: "Bamboo (Engineered)",
+                category: "engineered",
+                price: "₹70 - ₹150",
+                uses: "Flooring, furniture, wall panels",
+                characteristics: "Sustainable, technically a grass"
+            }
+        ];
+
+        // DOM elements
+        const priceTable = document.getElementById('priceTable').getElementsByTagName('tbody')[0];
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const searchInput = document.getElementById('search');
+
+        // Display all woods initially
+        displayWoods(woods);
+
+        // Filter buttons event listeners
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Set active button
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Filter woods
+                const filter = button.dataset.filter;
+                let filteredWoods = woods;
+                
+                if (filter !== 'all') {
+                    filteredWoods = woods.filter(wood => wood.category === filter);
+                }
+                
+                // Apply search filter if there's a search term
+                const searchTerm = searchInput.value.toLowerCase();
+                if (searchTerm) {
+                    filteredWoods = filteredWoods.filter(wood => 
+                        wood.name.toLowerCase().includes(searchTerm) || 
+                        wood.uses.toLowerCase().includes(searchTerm) ||
+                        wood.characteristics.toLowerCase().includes(searchTerm)
+                    );
+                }
+                
+                displayWoods(filteredWoods);
+            });
+        });
+
+        // Search input event listener
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            
+            let filteredWoods = woods;
+            
+            if (activeFilter !== 'all') {
+                filteredWoods = woods.filter(wood => wood.category === activeFilter);
+            }
+            
+            filteredWoods = filteredWoods.filter(wood => 
+                wood.name.toLowerCase().includes(searchTerm) || 
+                wood.uses.toLowerCase().includes(searchTerm) ||
+                wood.characteristics.toLowerCase().includes(searchTerm)
+            );
+            
+            displayWoods(filteredWoods);
+        });
+
+        // Function to display woods in the table
+        function displayWoods(woodsToDisplay) {
+            priceTable.innerHTML = '';
+            
+            if (woodsToDisplay.length === 0) {
+                const row = priceTable.insertRow();
+                const cell = row.insertCell();
+                cell.colSpan = 5;
+                cell.textContent = 'No wood types found matching your criteria';
+                cell.style.textAlign = 'center';
+                cell.style.padding = '2rem';
+                return;
+            }
+            
+            woodsToDisplay.forEach(wood => {
+                const row = priceTable.insertRow();
+                
+                const nameCell = row.insertCell();
+                nameCell.textContent = wood.name;
+                
+                const categoryCell = row.insertCell();
+                const categorySpan = document.createElement('span');
+                categorySpan.className = `category ${wood.category}`;
+                categorySpan.textContent = wood.category.charAt(0).toUpperCase() + wood.category.slice(1);
+                categoryCell.appendChild(categorySpan);
+                
+                const priceCell = row.insertCell();
+                priceCell.innerHTML = `<span class="price">${wood.price}</span>`;
+                
+                const usesCell = row.insertCell();
+                usesCell.textContent = wood.uses;
+                
+                const characteristicsCell = row.insertCell();
+                characteristicsCell.textContent = wood.characteristics;
+            });
+        }
+    </script>
+</body>
+</html>
